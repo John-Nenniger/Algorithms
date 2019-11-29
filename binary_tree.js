@@ -10,7 +10,6 @@ class Node {
         this.value = value
     }
 
-    
 }
 
 function isUnival(node){
@@ -43,6 +42,7 @@ function countUnival(node, univalCount = 0) {
    1   0
   / \
  1   1
+
 */
 
 
@@ -71,14 +71,77 @@ l(countUnival(b)) // 1
 l(countUnival(c)) // 1
 l(countUnival(d)) // 3
 
+// ^ works but is slow.  Now i'll try in a way that only evaluates each node once
+// first I need to get all of the leaves and start from there
 
-// let first = new Node(undefined, 0)
-// let second_one = new Node(first, 1)
-// let second_zero = new Node(first, 0)
-// let third_zero = new Node(second_zero, 0)
-// let third_one = new Node(second_zero, 1)
-// let fourth_one_one = new Node(third_one, 1)
-// let fourth_one_two = new Node(third_one, 1)
+/* Build the data structure in the example: 
+   0
+  / \
+ 1   0
+    / \
+   1   0
+  / \
+ 1   1
+
+*/
+
+function getLeaves(node){
+    if (!node.left && !node.right){
+        return node
+    } else if(node.left && node.right){
+        return [getLeaves(node.left), getLeaves(node.right)].flat()
+    } else if (node.left && !node.right){
+        return getLeaves(node.left)
+    } else if (node.right && !node.left) {
+        return getLeaves(node.right)
+    }
+}
+
+l(getLeaves(g))
+
+// While the above function works in that it gets all the leaves given a root,
+// it defeats the purpose because it requires us to recusively get to all the leaves
+// before we even start counting unival subtrees. 
+
+// to properly implement the solution which starts at the leaves, we actually
+// have to create a new data structure that starts at the leaves.  I'll try that below
+
+
+class Noode{
+    constructor(root, value){
+        this.root = root,
+        this.value = value            
+    }
+}
+
+/* Build the data structure in the example: 
+   0 ///  alpha
+  / \
+ 1   0 // beta, gamma
+    / \
+   1   0 // delta , epsilon
+  / \
+ 1   1 // zeta, eta
+
+*/
+
+const alpha = new Noode(undefined, 0)
+const beta = new Noode(alpha, 1)
+const gamma = new Noode(alpha, 0)
+const delta = new Noode(gamma, 1)
+const epsilon = new Noode(gamma, 0)
+const zeta = new Noode(delta, 1)
+const eta = new Noode(delta, 1)
+
+
+// I'm having trouble here because I still don't really have access to all the leaves..
+
+
+
+
+
+
+
 
 
 
