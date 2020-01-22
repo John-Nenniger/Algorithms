@@ -36,13 +36,19 @@ function isNumber(str){
         return false
     }
     let previousMaybe = false
+    let hasPeriod = false
+    let hasDash = false
     for (character of characters){
         if(yes.includes(character)){
             previousMaybe = false
-        } else if (maybe.includes(character) && previousMaybe){
+        } else if (maybe.includes(character) && previousMaybe || (character === '-' && hasDash) || (character === '.' && hasPeriod)){
             return false
-        } else if (maybe.includes(character)){
+        } else if (character === '-'){
             previousMaybe = true
+            hasDash = true
+        } else if (character === '.'){
+            previousMaybe = true
+            hasPeriod = true
         } else {
             return false
         }
@@ -66,3 +72,8 @@ l(isNumber("3.43a"))
 l(isNumber("a -2"))
 l(isNumber("-"))
 l(isNumber("."))
+
+
+
+l(isNumber("432.5432.4321")) 
+l(isNumber("-574.38321")) 
